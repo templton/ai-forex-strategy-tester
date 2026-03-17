@@ -16,11 +16,39 @@ endpoint - /api/v1/time/current
 ## 🔄 Пошаговое выполнение (СИНХРОННЫЙ РЕЖИМ)
 
 ### Шаг 1: Создание ендпоинта
-- [ ] Создать новый класс API контроллера - Common
-- [ ] Добавить метод-заглушку - getWeekDayInfo
-- [ ] Прописать роутинг для ендпоинта
-- [ ] Обновить swagger
+- [x] Создать новый класс API контроллера - Common
+- [x] Добавить метод-заглушку - getWeekDayInfo
+- [x] Прописать роутинг для ендпоинта
+- [x] Обновить swagger
 
+### Шаг 2: Создание компонента Common, наполнение ответа метода реальными данными
+
+- src/Components/Common - папка компонента Common
+- src/Components/Common/Contracts - здесь будут контракты
+- src/Components/Common/Contracts/TimeInfo - контракты для получения параметров дня недели
+
+TimeInfoDto.php - объект для передачи данных от компонента. Поля объекта | формат:
+- currentDate - \DateTime
+- dayOfWeek - int
+- timeToEnd - string
+
+Контракт TimeInfoInterface.php
+- getTimeInfo(): TimeInfoDto
+
+Класс компонента - CommonComponent.php
+
+Метод CommonComponent.php - getTimeInfo наполняет TimeInfoDto:
+- currentDate | текущая в формате DD.MM.YYYY HH:i:s
+- dayOfWeek | текущий день недели в сокращенной форме (ПН,ВТ,СР,ЧТ,ПТ,СБ,ВС)
+- timeToEnd | Сколько времени осталось до 00:00 часов воскресенья текущей недели в формате DD:HH:MM
+
+
+Описание компонента Common:
+- [ ] Создай необходимые папки и файлы для компонента Common
+- [ ] Реализуй логику компонента
+- [ ] В конструкторе CommonApiController задай приватное свойство TimeInfoInterface: CommonComponent
+- [ ] В соответствующем методе CommonApiController вызови метод CommonComponent для наполнения ответа текущего ендпоинта
+- [ ] Обновить swagger
 
 ## Правила выполнения задачи
 Выполняй задачу по шагам. Внутри каждого шага есть пункты с чекбоксами. По готовности каждого пункта - отмечай соответствующий чекбос.

@@ -37,6 +37,28 @@
                     }
                 }
             }
+        },
+        "/api/v1/time/current": {
+            "get": {
+                "tags": [
+                    "CommonApi"
+                ],
+                "summary": "GetWeekDayInfo Current",
+                "description": "",
+                "operationId": "App\\Http\\Controllers\\Api\\V1\\CommonApiController@getWeekDayInfo",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
