@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Components\Common\CommonComponent;
+use Components\Common\Contracts\TimeInfo\TimeInfoInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(TimeInfoInterface::class, CommonComponent::class);
     }
 
     /**
