@@ -36,23 +36,23 @@
 ---
 
 ### Шаг 1: Модель, миграция, интерфейс репозитория, DTO
-- [ ] Создать модель `app/Models/Strategy.php`
+- [x] Создать модель `app/Models/Strategy.php`
     - Поля: `id`, `description` (text), `parameters` (json), `version` (integer, default 1), `created_at`, `updated_at`
-- [ ] Создать миграцию `create_strategies_table`
-- [ ] Создать `CreateStrategyDto.php` (readonly)
+- [x] Создать миграцию `create_strategies_table`
+- [x] Создать `CreateStrategyDto.php` (readonly)
     - Поля: `description` (string), `parameters` (array)
-- [ ] Создать `StrategyDto.php` (readonly)
+- [x] Создать `StrategyDto.php` (readonly)
     - Поля: `id` (int), `description` (string), `parameters` (array), `version` (int), `createdAt` (string), `updatedAt` (string)
-- [ ] Запусти миграции
-- [ ] Создать интерфейс репозитория `StrategyRepositoryInterface.php`
+- [x] Запусти миграции
+- [x] Создать интерфейс репозитория `StrategyRepositoryInterface.php`
     - Метод `create(CreateStrategyDto $dto): Strategy`
-- [ ] Создать репозиторий `StrategyRepository.php` (реализует интерфейс)
+- [x] Создать репозиторий `StrategyRepository.php` (реализует интерфейс)
     - Метод `create(CreateStrategyDto $dto): Strategy` (сохраняет модель, возвращает Eloquent модель)
 
 **Критерии приёмки:**
-- [ ] Таблица создаётся, поля соответствуют
-- [ ] DTO имеют корректные типы
-- [ ] Интерфейс и репозиторий соответствуют контракту
+- [x] Таблица создаётся, поля соответствуют
+- [x] DTO имеют корректные типы
+- [x] Интерфейс и репозиторий соответствуют контракту
 
 ➡️ **После выполнения шага:**
 1. Отметить выполненные пункты
@@ -66,9 +66,9 @@
 ---
 
 ### Шаг 2: Сервис и маппер
-- [ ] Создать маппер `app/Mappers/StrategyMapper.php`
+- [x] Создать маппер `app/Mappers/StrategyMapper.php`
     - Метод `toDto(Strategy $model): StrategyDto` (преобразует модель в DTO)
-- [ ] Создать сервис `StrategyService.php`
+- [x] Создать сервис `StrategyService.php`
     - Конструктор принимает `StrategyRepositoryInterface`
     - Метод `createStrategy(CreateStrategyDto $dto): StrategyDto`
         - Вызывает репозиторий → получает модель
@@ -76,9 +76,9 @@
         - Возвращает DTO
 
 **Критерии приёмки:**
-- [ ] Маппер правильно преобразует модель в DTO
-- [ ] Сервис вызывает репозиторий и возвращает DTO
-- [ ] В конструктор сервиса передаётся интерфейс (DI)
+- [x] Маппер правильно преобразует модель в DTO
+- [x] Сервис вызывает репозиторий и возвращает DTO
+- [x] В конструктор сервиса передаётся интерфейс (DI)
 
 ➡️ **После выполнения шага:**
 1. Отметить выполненные пункты
@@ -92,19 +92,19 @@
 ---
 
 ### Шаг 3: Контроллер, роутинг, валидация
-- [ ] Создать Form Request `StrategyStoreRequest.php`
+- [x] Создать Form Request `StrategyStoreRequest.php`
     - Правила: `description` (required, string), `parameters` (required, array)
-- [ ] Создать контроллер `app/Http/Controllers/Api/V1/StrategyController.php`
+- [x] Создать контроллер `app/Http/Controllers/Api/V1/StrategyController.php`
     - Конструктор принимает `StrategyService`
     - Метод `store(StrategyStoreRequest $request): JsonResponse`
         - Из `$request->validated()` создаёт `CreateStrategyDto`
         - Вызывает `$this->service->createStrategy($dto)`
         - Возвращает ответ в формате API (201 Created)
-- [ ] Добавить роут в `routes/api.php`: `POST /api/v1/strategies`
+- [x] Добавить роут в `routes/api.php`: `POST /api/v1/strategies`
 
 **Критерии приёмки:**
-- [ ] При запросе с неверными данными — 422 с ошибками
-- [ ] При корректном запросе — 201 Created с данными стратегии в формате API
+- [x] При запросе с неверными данными — 422 с ошибками
+- [x] При корректном запросе — 201 Created с данными стратегии в формате API
 
 ➡️ **После выполнения шага:**
 1. Отметить выполненные пункты
@@ -118,13 +118,13 @@
 ---
 
 ### Шаг 4: Тесты
-- [ ] Создать `tests/Feature/Api/Strategy/StrategyTest.php`
-- [ ] Тест: `test_can_create_strategy()` — успешное создание, проверка структуры ответа
-- [ ] Тест: `test_validation_fails()` — проверка обязательных полей
+- [x] Создать `tests/Feature/Api/Strategy/StrategyTest.php`
+- [x] Тест: `test_can_create_strategy()` — успешное создание, проверка структуры ответа
+- [x] Тест: `test_validation_fails()` — проверка обязательных полей
 
 **Критерии приёмки:**
-- [ ] Тесты проходят
-- [ ] Покрытие ключевых сценариев
+- [x] Тесты проходят
+- [x] Покрытие ключевых сценариев
 
 ➡️ **После выполнения шага:**
 1. Отметить выполненные пункты
