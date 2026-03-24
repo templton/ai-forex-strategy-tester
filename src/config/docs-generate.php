@@ -73,6 +73,7 @@ return [
 
     // Map controller names to custom tags in documentation
     'tag_mappings' => [
+        'StrategyController' => 'Strategies',
         'AuthController' => 'Authentication',
         'UserController' => 'Users',
         'ProfileController' => 'Profile',
@@ -208,6 +209,15 @@ return [
                 'email' => 'john@example.com',
                 'password' => 'SecurePassword123',
                 'phone' => '+1234567890',
+            ],
+        ],
+        'store' => [
+            'body' => [
+                'description' => 'Momentum breakout strategy',
+                'parameters' => [
+                    'symbol' => 'EURUSD',
+                    'timeframe' => 'H1',
+                ],
             ],
         ],
         'show' => [

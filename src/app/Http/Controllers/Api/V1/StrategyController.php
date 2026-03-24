@@ -15,6 +15,13 @@ class StrategyController extends Controller
     ) {
     }
 
+    /**
+     * Create a new trading strategy.
+     *
+     * Endpoint: POST /api/v1/strategies
+     *
+     * @return JsonResponse
+     */
     public function store(StrategyStoreRequest $request): JsonResponse
     {
         /** @var array{description: string, parameters: array} $validated */

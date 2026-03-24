@@ -59,6 +59,58 @@
                     }
                 }
             }
+        },
+        "/api/v1/strategies": {
+            "post": {
+                "tags": [
+                    "Strategies"
+                ],
+                "summary": "Create a new Strategy",
+                "description": "Create a new Strategy with the provided data",
+                "operationId": "App\\Http\\Controllers\\Api\\V1\\StrategyController@store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Momentum breakout strategy"
+                                    },
+                                    "parameters": {
+                                        "type": "array",
+                                        "example": {
+                                            "symbol": "EURUSD",
+                                            "timeframe": "H1"
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "description",
+                                    "parameters"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Resource created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
         }
     },
     "components": {
