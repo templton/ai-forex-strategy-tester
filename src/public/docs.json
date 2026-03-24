@@ -61,6 +61,26 @@
             }
         },
         "/api/v1/strategies": {
+            "get": {
+                "tags": [
+                    "Strategies"
+                ],
+                "summary": "Get all Strategy",
+                "description": "Retrieve a list of all Strategy with pagination support",
+                "operationId": "App\\Http\\Controllers\\Api\\V1\\StrategyController@index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Strategies"
@@ -213,6 +233,40 @@
                     },
                     "422": {
                         "description": "Validation error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Strategies"
+                ],
+                "summary": "Delete a Strategy",
+                "description": "Permanently delete a Strategy from the system",
+                "operationId": "App\\Http\\Controllers\\Api\\V1\\StrategyController@destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "The id identifier"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Resource deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found"
                     }
                 }
             }

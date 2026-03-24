@@ -35,6 +35,39 @@ class StrategyService
         return $this->strategyMapper->toDto($model);
     }
 
+    /**
+     * @return array{
+     *     data: array<int, array{id:int,description:string,parameters:array,version:int,created_at:string|null,updated_at:string|null}>,
+     *     meta: array{current_page:int,last_page:int,per_page:int,total:int}
+     * }
+     */
+    public function getStrategies(int $page, int $limit): array
+    {
+        $paginator = $this->strategyRepository->getPaginated($page, $limit);
+
+        $data = $paginator->getCollection()
+            ->map(static fn ($strategy): array => [
+                'id' => $strategy->id,
+                'description' => $strategy->description,
+                'parameters' => $strategy->parameters,
+                'version' => $strategy->version,
+                'created_at' => $strategy->created_at?->toDateTimeString(),
+                'updated_at' => $strategy->updated_at?->toDateTimeString(),
+            ])
+            ->values()
+            ->all();
+
+        return [
+            'data' => $data,
+            'meta' => [
+                'current_page' => $paginator->currentPage(),
+                'last_page' => $paginator->lastPage(),
+                'per_page' => $paginator->perPage(),
+                'total' => $paginator->total(),
+            ],
+        ];
+    }
+
     public function updateStrategy(int $id, UpdateStrategyDto $dto): StrategyDto
     {
         $model = $this->strategyRepository->find($id);
@@ -56,5 +89,16 @@ class StrategyService
         }
 
         return $this->strategyMapper->toDto($model);
+    }
+
+    public function deleteStrategy(int $id): void
+    {
+        $model = $this->strategyRepository->find($id);
+
+        if ($model === null) {
+            throw new ModelNotFoundException('Strategy not found');
+        }
+
+        $this->strategyRepository->delete($id);
     }
 }

@@ -10,6 +10,8 @@ use App\Http\Requests\Strategy\StrategyUpdateRequest;
 use App\Services\StrategyService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Throwable;
 
 class StrategyController extends Controller
 {
@@ -80,6 +82,22 @@ class StrategyController extends Controller
         ], 200);
     }
 
+    public function index(Request $request): JsonResponse
+    {
+        $page = max(1, (int) $request->query('page', 1));
+        $limit = max(1, min((int) $request->query('limit', 10), 100));
+
+        $result = $this->strategyService->getStrategies($page, $limit);
+
+        return response()->json([
+            'success' => true,
+            'data' => $result['data'],
+            'meta' => $result['meta'],
+            'message' => 'OK',
+            'errors' => [],
+        ], 200);
+    }
+
     public function update(StrategyUpdateRequest $request, int $id): JsonResponse
     {
         /** @var array{description?: string, parameters?: array} $validated */
@@ -114,5 +132,28 @@ class StrategyController extends Controller
             'message' => 'OK',
             'errors' => [],
         ], 200);
+    }
+
+    public function destroy(int $id): JsonResponse
+    {
+        try {
+            $this->strategyService->deleteStrategy($id);
+        } catch (ModelNotFoundException $exception) {
+            return response()->json([
+                'success' => true,
+                'data' => [],
+                'message' => $exception->getMessage(),
+                'errors' => [],
+            ], 404);
+        } catch (Throwable $exception) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Database error: '.$exception->getMessage(),
+                'errors' => [],
+            ], 500);
+        }
+
+        return response()->json(null, 204);
     }
 }

@@ -81,6 +81,52 @@ class StrategyTest extends TestCase
             ]);
     }
 
+    public function test_can_get_paginated_strategies(): void
+    {
+        for ($index = 1; $index <= 15; $index++) {
+            Strategy::query()->create([
+                'description' => 'Strategy ' . $index,
+                'parameters' => ['period' => $index],
+                'version' => 1,
+            ]);
+        }
+
+        $response = $this->getJson('/api/v1/strategies?page=1&limit=10');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    '*' => [
+                        'id',
+                        'description',
+                        'parameters',
+                        'version',
+                        'created_at',
+                        'updated_at',
+                    ],
+                ],
+                'meta' => [
+                    'current_page',
+                    'last_page',
+                    'per_page',
+                    'total',
+                ],
+                'message',
+                'errors',
+            ])
+            ->assertJson([
+                'success' => true,
+                'message' => 'OK',
+                'meta' => [
+                    'current_page' => 1,
+                    'per_page' => 10,
+                    'total' => 15,
+                ],
+                'errors' => [],
+            ]);
+    }
+
     public function test_get_nonexistent_strategy_returns_404(): void
     {
         $response = $this->getJson('/api/v1/strategies/999999');
@@ -180,5 +226,32 @@ class StrategyTest extends TestCase
             'id' => $strategy->id,
             'version' => 6,
         ]);
+    }
+
+    public function test_can_delete_strategy(): void
+    {
+        $strategy = Strategy::query()->create([
+            'description' => 'Delete me',
+            'parameters' => ['signal' => 'sell'],
+            'version' => 1,
+        ]);
+
+        $response = $this->deleteJson('/api/v1/strategies/' . $strategy->id);
+
+        $response->assertStatus(204);
+        $this->assertDatabaseMissing('strategies', ['id' => $strategy->id]);
+    }
+
+    public function test_delete_nonexistent_strategy_returns_404(): void
+    {
+        $response = $this->deleteJson('/api/v1/strategies/999999');
+
+        $response->assertStatus(404)
+            ->assertJson([
+                'success' => true,
+                'data' => [],
+                'message' => 'Strategy not found',
+                'errors' => [],
+            ]);
     }
 }
