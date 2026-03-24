@@ -18,4 +18,17 @@ class StrategyRepository implements StrategyRepositoryInterface
 
         return $model;
     }
+
+    public function find(int $id): ?Strategy
+    {
+        return Strategy::query()->find($id);
+    }
+
+    public function update(Strategy $strategy, array $data): Strategy
+    {
+        $strategy->update($data);
+        $strategy->refresh();
+
+        return $strategy;
+    }
 }

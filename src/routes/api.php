@@ -15,5 +15,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/test-api', [TestApiController::class, 'test']);
     Route::get('/time/current', [CommonApiController::class, 'getWeekDayInfo']);
     Route::post('/strategies', [StrategyController::class, 'store']);
+    Route::get('/strategies/{id}', [StrategyController::class, 'show']);
+    Route::put('/strategies/{id}', [StrategyController::class, 'update']);
 });
 

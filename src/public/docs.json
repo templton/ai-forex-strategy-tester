@@ -111,6 +111,111 @@
                     }
                 }
             }
+        },
+        "/api/v1/strategies/{id}": {
+            "get": {
+                "tags": [
+                    "Strategies"
+                ],
+                "summary": "Get a specific Strategy",
+                "description": "Retrieve detailed information about a specific Strategy",
+                "operationId": "App\\Http\\Controllers\\Api\\V1\\StrategyController@show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "description": "The id identifier",
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Strategies"
+                ],
+                "summary": "Update a Strategy",
+                "description": "Update an existing Strategy with new data",
+                "operationId": "App\\Http\\Controllers\\Api\\V1\\StrategyController@update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "description": "The id identifier",
+                        "example": 1
+                    },
+                    {
+                        "name": "X-Custom-Header",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "custom-value"
+                        },
+                        "example": "custom-value"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "parameters": {
+                                        "type": "array"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
         }
     },
     "components": {

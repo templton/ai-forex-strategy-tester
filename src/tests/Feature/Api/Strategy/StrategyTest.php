@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\Strategy;
 
+use App\Models\Strategy;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -54,5 +55,130 @@ class StrategyTest extends TestCase
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['description', 'parameters']);
+    }
+
+    public function test_can_get_strategy(): void
+    {
+        $strategy = Strategy::query()->create([
+            'description' => 'GET strategy',
+            'parameters' => ['period' => 14],
+            'version' => 1,
+        ]);
+
+        $response = $this->getJson('/api/v1/strategies/' . $strategy->id);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'OK',
+                'data' => [
+                    'id' => $strategy->id,
+                    'description' => 'GET strategy',
+                    'parameters' => ['period' => 14],
+                    'version' => 1,
+                ],
+                'errors' => [],
+            ]);
+    }
+
+    public function test_get_nonexistent_strategy_returns_404(): void
+    {
+        $response = $this->getJson('/api/v1/strategies/999999');
+
+        $response->assertStatus(404)
+            ->assertJson([
+                'success' => true,
+                'data' => [],
+                'message' => 'Strategy not found',
+                'errors' => [],
+            ]);
+    }
+
+    public function test_can_update_strategy(): void
+    {
+        $strategy = Strategy::query()->create([
+            'description' => 'Before update',
+            'parameters' => ['risk' => 1],
+            'version' => 1,
+        ]);
+
+        $payload = [
+            'description' => 'After update',
+            'parameters' => ['risk' => 2],
+        ];
+
+        $response = $this->putJson('/api/v1/strategies/' . $strategy->id, $payload);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'OK',
+                'data' => [
+                    'id' => $strategy->id,
+                    'description' => 'After update',
+                    'parameters' => ['risk' => 2],
+                    'version' => 2,
+                ],
+                'errors' => [],
+            ]);
+    }
+
+    public function test_update_nonexistent_strategy_returns_404(): void
+    {
+        $response = $this->putJson('/api/v1/strategies/999999', [
+            'description' => 'Will fail',
+        ]);
+
+        $response->assertStatus(404)
+            ->assertJson([
+                'success' => true,
+                'data' => [],
+                'message' => 'Strategy not found',
+                'errors' => [],
+            ]);
+    }
+
+    public function test_update_with_partial_data(): void
+    {
+        $strategy = Strategy::query()->create([
+            'description' => 'Partial before',
+            'parameters' => ['threshold' => 10],
+            'version' => 1,
+        ]);
+
+        $response = $this->putJson('/api/v1/strategies/' . $strategy->id, [
+            'description' => 'Partial after',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'OK',
+                'data' => [
+                    'id' => $strategy->id,
+                    'description' => 'Partial after',
+                    'parameters' => ['threshold' => 10],
+                    'version' => 2,
+                ],
+                'errors' => [],
+            ]);
+    }
+
+    public function test_version_increments_on_update(): void
+    {
+        $strategy = Strategy::query()->create([
+            'description' => 'Version check',
+            'parameters' => ['alpha' => 1],
+            'version' => 5,
+        ]);
+
+        $this->putJson('/api/v1/strategies/' . $strategy->id, [
+            'description' => 'Version check updated',
+        ])->assertStatus(200);
+
+        $this->assertDatabaseHas('strategies', [
+            'id' => $strategy->id,
+            'version' => 6,
+        ]);
     }
 }
